@@ -16,13 +16,27 @@ function generateHTMLTemplate(items){
     </html>`
 }
 
-function handleHoverOverStars(){
-    $('body').on('mouseover', '.stars', function(e){
-        console.log("hello")
+function handleClickOnStars(){
+    $('body').on('click', '.stars', function(e){
+        $(this).addClass("checked")
         let currId = parseInt($(this).attr('id').substring(1), 10)
         for (let i = 0; i < currId; i++){
-            $(`#n${i+1}`).attr('src', 'full_star.png')
+            $(`#n${i+1}`).attr('src', 'src/photos/full_star.png')
         }
+    })
+}
+
+function handleHoverOverStars(){
+    $('body').on('mouseover', '.stars', function(e){
+        $('.stars').css('cursor', 'pointer')
+        let currId = parseInt($(this).attr('id').substring(1), 10)
+        for (let i = 0; i < currId; i++){
+            $(`#n${i+1}`).attr('src', 'src/photos/full_star.png')
+        }
+    })
+    $('body').on('mouseout', '.stars', function(e){
+    $('.checked').nextAll().attr('src', 'src/photos/emptystar.png')
+    //settimeout to delay the turning of white just for a bit? to make the stars not go blank every time you hover between them?
     })
 }
 
@@ -56,11 +70,11 @@ let newCreationTemplate =  `<h1>My Bookmarks</h1>
 <div class="entry-selected"> 
 <input type="textbox" class="title" placeholder="Title of Page">
 <span>
-    <img class="stars" id="n1" src="photos/emptystar.png">
-    <img class="stars" id="n2" src="photos/emptystar.png">
-    <img class="stars" id="n3" src="photos/emptystar.png">
-    <img class="stars" id="n4" src="photos/emptystar.png">
-    <img class="stars" id="n5" src="photos/emptystar.png">
+    <img class="stars" id="n1" src="src/photos/emptystar.png">
+    <img class="stars" id="n2" src="src/photos/emptystar.png">
+    <img class="stars" id="n3" src="src/photos/emptystar.png">
+    <img class="stars" id="n4" src="src/photos/emptystar.png">
+    <img class="stars" id="n5" src="src/photos/emptystar.png">
 </span>
 <input type="textarea" class="description" placeholder="Add a description (optional)">
 <div class="e-buttons">
@@ -91,16 +105,16 @@ function handleNewBookmarkSubmit(){
 }
 
 function render(){
-    console.log(store.adding)
-    if (!store.adding)
+    if (!store.store.adding)
    $('body').html(generateHTMLTemplate(store.items))
-    if (store.adding)
+    if (store.store.adding)
     $('body').html(generateNewCreationTemplate())
 }
 
 function handleEventListeners(){
     handleHoverOverStars()
     handleNewClick()
+    handleClickOnStars()
 }
 
 export default{
