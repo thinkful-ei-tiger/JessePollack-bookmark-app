@@ -10,4 +10,7 @@ const store = {
       this.store.push(item)
   }
 
-  
+  export default{
+      store,
+      addItem
+  }

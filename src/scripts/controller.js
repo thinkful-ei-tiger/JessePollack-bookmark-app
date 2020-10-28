@@ -1,5 +1,6 @@
 import api from './api'
 import store from './store'
+import $ from 'jquery'
 
 
 function generateHTMLTemplate(items){
@@ -25,6 +26,12 @@ function handleHoverOverStars(){
     })
 }
 
+function handleNewClick(){
+$('body').on('click', '.new', function(e){
+    store.store.adding = true
+    render()
+})
+}
 function generateEntryTemplate(item){
     let newEntry=`
         <div class="entry">
@@ -40,6 +47,30 @@ function generateEntryTemplate(item){
     </div>`
     return newEntry
     }
+
+function generateNewCreationTemplate(){
+let newCreationTemplate =  `<h1>My Bookmarks</h1>
+<form class="new-bookmark">
+<label for="inputbookmark">Add New Bookmark:</label>
+<input type="textbox" name="inputbookmark" class="inputbm">
+<div class="entry-selected"> 
+<input type="textbox" class="title" placeholder="Title of Page">
+<span>
+    <img class="stars" id="n1" src="photos/emptystar.png">
+    <img class="stars" id="n2" src="photos/emptystar.png">
+    <img class="stars" id="n3" src="photos/emptystar.png">
+    <img class="stars" id="n4" src="photos/emptystar.png">
+    <img class="stars" id="n5" src="photos/emptystar.png">
+</span>
+<input type="textarea" class="description" placeholder="Add a description (optional)">
+<div class="e-buttons">
+<button>Cancel</button>
+<button type="submit">Create</button>
+</div>
+</div>
+</form>`
+return newCreationTemplate
+}
 
 
 function handleNewBookmarkSubmit(){
@@ -60,11 +91,16 @@ function handleNewBookmarkSubmit(){
 }
 
 function render(){
-    generateHTMLTemplate(store.items)
+    console.log(store.adding)
+    if (!store.adding)
+   $('body').html(generateHTMLTemplate(store.items))
+    if (store.adding)
+    $('body').html(generateNewCreationTemplate())
 }
 
 function handleEventListeners(){
     handleHoverOverStars()
+    handleNewClick()
 }
 
 export default{
