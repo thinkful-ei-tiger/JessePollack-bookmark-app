@@ -6,14 +6,15 @@ import $ from 'jquery'
 function generateHTMLTemplate(items){
     let result = `<h1> My Bookmarks</h1>
     <div class="buttons">
-        <button>New</button>
-        <button>Filter By</button>
+        <button class="new">New</button>
+        <button class="filter">Filter By</button>
     </div>
     <div class="bookmarks"></div>`
     items.forEach((item) => result += generateEntryTemplate(item))
     result += ` </div>
     </body>
     </html>`
+    return result
 }
 
 function handleClickOnStars(){
@@ -36,27 +37,29 @@ function handleHoverOverStars(){
         }
     })
     $('body').on('mouseout', '.stars', function(e){
+    if ($('.stars').hasClass('checked'))
     $('.checked').nextAll().attr('src', 'src/photos/emptystar.png')
+    else $('.stars').attr('src', 'src/photos/emptystar.png')
     //settimeout to delay the turning of white just for a bit? to make the stars not go blank every time you hover between them?
     })
 }
 
 function handleNewClick(){
 $('body').on('click', '.new', function(e){
-    store.store.adding = true
+    store.adding = true
     render()
 })
 }
 function generateEntryTemplate(item){
     let newEntry=`
         <div class="entry">
-        <span>Hello</span>
+        <span>${item.title}</span>
         <span>`
         let star
             for (let i = 0; i < 5; i++){
-                if (i < item.rating) star="full star.png"
+                if (i < item.rating) star="full_star.png"
                 else star = "emptystar.png"
-                newEntry+=  `<img src="photos/${star}"></img>`
+                newEntry+=  `<img src="src/photos/${star}"></img>`
             }
       newEntry+= `</span>
     </div>`
@@ -93,12 +96,16 @@ function handleNewBookmarkSubmit(){
         e.preventDefault()
         let newURL = $('.inputbm').val()
         let description = $('.description').val()
-        let rating = $('.rating').val()
+        let rating = 0;
+        rating = parseInt($('.checked').attr("id").substring(1))
+        //figure out how to make rating optional
         let title = $('.title').val()
         api.addBookmark(newURL, description, rating, title).then(data => {
             store.addItem(data)
+            store.adding = false;
             render()
-        }).catch(err => renderError(err.message))
+        }).catch(err => console.log(err.message))
+
     }
 
     
@@ -106,13 +113,15 @@ function handleNewBookmarkSubmit(){
 }
 
 function render(){
-    if (!store.store.adding)
-   $('body').html(generateHTMLTemplate(store.items))
-    if (store.store.adding)
+    if (!store.adding){
+   $('body').html(generateHTMLTemplate(store.items.bookmarks))
+    }
+     else
     $('body').html(generateNewCreationTemplate())
 }
 
 function handleEventListeners(){
+    handleNewBookmarkSubmit()
     handleHoverOverStars()
     handleNewClick()
     handleClickOnStars()

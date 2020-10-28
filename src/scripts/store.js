@@ -1,4 +1,4 @@
-const store = {
+const items = {
     bookmarks: [],
     adding: false,
     error: null,
@@ -7,10 +7,10 @@ const store = {
 
 
   function addItem(item){
-      this.store.push(item)
+      items.bookmarks.push(item)
   }
 
   export default{
-      store,
+      items,
       addItem
   }
