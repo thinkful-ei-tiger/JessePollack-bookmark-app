@@ -18,6 +18,7 @@ function generateHTMLTemplate(items){
 
 function handleClickOnStars(){
     $('body').on('click', '.stars', function(e){
+        $(this).siblings().removeClass("checked")
         $(this).addClass("checked")
         let currId = parseInt($(this).attr('id').substring(1), 10)
         for (let i = 0; i < currId; i++){
