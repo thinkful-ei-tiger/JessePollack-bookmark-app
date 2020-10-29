@@ -91,7 +91,7 @@ function generateExpandedView(item){
     let newEntry = `<div class="entry-selected max-height">
     <div class="nospacing" style="border: none" data-item-id=${item.id}>
     <img class="edit" src="src/photos/edit_icon.png">
-    <button class="visit" onclick="location.href='${item.url}';">Visit Site</button>
+    <button class="visit" onclick="window.open('${item.url}','_blank')">Visit Site</button>
     `
        
     newEntry +=`</div>`
