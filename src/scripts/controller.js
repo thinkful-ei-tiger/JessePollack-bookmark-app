@@ -61,20 +61,24 @@ function generateHTMLTemplate(items){
 function handleHoverOverStars(){
     $('body').on('mouseover', '.stars', function(e){
         let currId = parseInt($(this).attr('id').substring(1), 10)
-        store.currentRating = currId
+        store.items.currentRating.rating = currId
         render()
     })  
 }
 
 function handleReleaseFromStars(){
-    console.log("hello")
     $('body').on('mouseout', '.stars', function(e){
         console.log("hello")
-        store.currentRating = null
+        store.items.currentRating.rating = null
         render()
         })
 }
 
+function handleClickOnStars(){
+    $('body').on('click', '.stars', function(e){
+        console.log("hello")
+    })
+}
 
 function handleNewClick(){
 $('body').on('click', '.new', function(e){
@@ -146,7 +150,7 @@ newCreationTemplate +=`<form class="new-bookmark">
 <span>`
 
 for (let i = 0; i < 5; i++){
-    if (store.currentRating != null && i < store.currentRating) newCreationTemplate += `<img class="stars" id="n${i+1}" src="src/photos/full_star.png"></img>`
+    if (store.items.currentRating.rating != null && i < store.items.currentRating.rating) newCreationTemplate += `<img class="stars" id="n${i+1}" src="src/photos/full_star.png">`
     else newCreationTemplate += `<img class="stars" id="n${i+1}" src="src/photos/emptystar2.png">`
 }
 
@@ -275,8 +279,9 @@ function handleEventListeners(){
     initialize()
     handleNewBookmarkSubmit()
     handleHoverOverStars()
+    handleReleaseFromStars()
     handleNewClick()
-    //handleClickOnStars()
+    handleClickOnStars()
     handleExpansion()
     handleDelete()
     handleFilter()
@@ -284,7 +289,6 @@ function handleEventListeners(){
     handleCancel()
     handleEdit()
     handleDoneEditing()
-    handleReleaseFromStars()
 }
 
 export default{
