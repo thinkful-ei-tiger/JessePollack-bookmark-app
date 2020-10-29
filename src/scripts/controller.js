@@ -96,7 +96,7 @@ function generateExpandedView(item){
        
     newEntry +=`</div>`
     if (!item.editing) newEntry += `<p>${item.desc}</p>`
-    else newEntry += `<input class="editing" type=textarea value=${item.desc}>
+    else newEntry += `<textarea class="editing">${item.desc}</textarea>
          <button class="done-editing">Done</button>
          ` 
         
@@ -132,7 +132,7 @@ newCreationTemplate +=`<form class="new-bookmark">
     <img class="stars" id="n4" src="src/photos/emptystar2.png">
     <img class="stars" id="n5" src="src/photos/emptystar2.png">
 </span>
-<input type="textarea" class="description" placeholder="Add a description (optional)">
+<textarea class="description" placeholder="Add a description (optional)"></textarea>
 <div class="e-buttons">
 <button class="cancel">Cancel</button>
 <button class="create" type="submit">Create</button>
