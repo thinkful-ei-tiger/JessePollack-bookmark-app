@@ -54,6 +54,8 @@ padding: 5px 10% 0px 10%;
 
 span{
     flex-basis: 50%;
+    display: flex;
+    justify-content: center;
 }
 
 .bookmarks:hover, button:hover{

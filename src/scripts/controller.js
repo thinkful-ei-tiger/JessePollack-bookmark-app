@@ -60,23 +60,29 @@ function generateHTMLTemplate(items){
 
 function handleHoverOverStars(){
     $('body').on('mouseover', '.stars', function(e){
+        e.stopPropagation();
         let currId = parseInt($(this).attr('id').substring(1), 10)
+        if (currId != store.items.currentRating.rating){
         store.items.currentRating.rating = currId
         render()
+        }
     })  
 }
 
 function handleReleaseFromStars(){
     $('body').on('mouseout', '.stars', function(e){
-        console.log("hello")
-        store.items.currentRating.rating = null
+        if (store.items.currentRating.selected != store.items.currentRating.rating){
+        store.items.currentRating.rating = store.items.currentRating.selected
         render()
+        }
         })
 }
 
 function handleClickOnStars(){
     $('body').on('click', '.stars', function(e){
-        console.log("hello")
+        store.items.currentRating.selected = store.items.currentRating.rating;
+        render
+        console.log()
     })
 }
 
@@ -150,7 +156,7 @@ newCreationTemplate +=`<form class="new-bookmark">
 <span>`
 
 for (let i = 0; i < 5; i++){
-    if (store.items.currentRating.rating != null && i < store.items.currentRating.rating) newCreationTemplate += `<img class="stars" id="n${i+1}" src="src/photos/full_star.png">`
+    if ( i < store.items.currentRating.rating) newCreationTemplate += `<img class="stars" id="n${i+1}" src="src/photos/full_star.png">`
     else newCreationTemplate += `<img class="stars" id="n${i+1}" src="src/photos/emptystar2.png">`
 }
 
@@ -259,13 +265,13 @@ function handleX(){
     })
 }
 
-function initialize(){
-    api.getItems().then(data =>{
-        data.forEach(current =>{ store.items.bookmarks.push(current)
-        })
-        render()
-    }).catch(err => console.log(err.message))
-}
+// function initialize(){
+//     api.getItems().then(data =>{
+//         data.forEach(current =>{ store.items.bookmarks.push(current)
+//         })
+//         render()
+//     }).catch(err => console.log(err.message))
+// }
 
 function render(){
     if (!store.adding&&!store.items.error){
@@ -276,7 +282,7 @@ function render(){
 }
 
 function handleEventListeners(){
-    initialize()
+    // initialize()
     handleNewBookmarkSubmit()
     handleHoverOverStars()
     handleReleaseFromStars()

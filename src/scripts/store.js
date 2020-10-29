@@ -3,7 +3,7 @@ const items = {
     adding: false,
     error: null,
     filter: 0, 
-    currentRating: {rating: null, confirmed: false}
+    currentRating: {rating: 0, selected: 0}
   };
 
   function findById(id){
