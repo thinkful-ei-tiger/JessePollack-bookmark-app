@@ -1,17 +1,33 @@
 html, body{
+    font-family: "Comic Sans MS", cursive, sans-serif;
     text-align: center;
     margin:0;
     box-sizing: border-box;
-    padding: 2% 20%;
+    padding: 2% 5%;
+}
+
+body{
+    background-image: url("../photos/background.jpg")
 }
 button{
-    width: 50%;
+    width: 40%;
+    padding: 5%;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    background-color: #4287f5; 
+    border-style: none;    
+}
+
+
+h1{
+    text-shadow: 5px 5px 10px rgba(255, 255, 255, 1)
 }
 
 
 img{
     height: 20px;
     width: 20px;
+    margin-bottom: 25px;
 }
 
 .buttons{
@@ -31,15 +47,22 @@ border: 2px solid black;
 padding: 5px 10% 0px 10%;
 }
 
-.bookmarks:hover, .buttons :hover{
+span{
+    flex-basis: 50%;
+}
+
+.bookmarks:hover, button:hover{
     cursor: pointer;
+}
+
+button:hover{
+    background-color:#6a9e8b
 }
 
 .entry-selected{
     display: flex;
     justify-content: space-between;
     flex-direction: column;
-    border: 2px solid black;
     }
 
 label{
@@ -52,6 +75,8 @@ label{
 
 input[type=textarea]{
     height: 100px;
+    border-radius: 4px;
+    border-style: none;
 }
 
 .delete{
@@ -72,4 +97,17 @@ input[type=textarea]{
 
 .X:hover{
     cursor: pointer;
+}
+
+input[type=textbox]{
+    width: 98%;
+    height: 30px;
+    margin-bottom: 25px;
+    border-radius: 5px;
+    border-style: none;
+
+}
+
+.title{
+margin-top: 25px;
 }

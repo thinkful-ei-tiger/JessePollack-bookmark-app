@@ -18,10 +18,12 @@ function generateHTMLTemplate(items){
       }
         result += `</select>
     </div>
-    <div class="bookmarks"></div>`
+    <div class="bookmarks">`
     items.forEach((item) =>{
+        if (item.rating >= store.items.filter){
         if (item.expanded) result += generateExpandedView(item)
-        else if (item.rating >= store.items.filter) result += generateEntryTemplate(item) 
+        else result += generateEntryTemplate(item) 
+        }
     })
     result += ` </div>
     </body>
@@ -63,9 +65,11 @@ $('body').on('click', '.new', function(e){
 })
 }
 function generateEntryTemplate(item){
+    let ellipses =''
+    if (item.title.length > 14) ellipses = '...'
     let newEntry=`
         <div class="entry" data-item-id=${item.id}>
-        <span>${item.title}</span>
+        <span>${item.title.substring(0,14)}${ellipses}</span>
         <span>`
         if (item.rating != undefined){
         let star
@@ -104,7 +108,7 @@ return newEntry
 
 function generateNewCreationTemplate(){
 let newCreationTemplate =  `<h1>My Bookmarks</h1>`
-let error=`<h1>My Bookmarks</h1>
+let error=`
 <div class="error">
     <div class="X">
         X
@@ -117,7 +121,7 @@ if (store.items.error) newCreationTemplate += error
 
 newCreationTemplate +=`<form class="new-bookmark">
 <label for="inputbookmark">Add New Bookmark:</label>
-<input type="textbox" name="inputbookmark" class="inputbm">
+<input type="textbox" name="inputbookmark" class="inputbm" placeholder="Place link here...">
 <div class="entry-selected"> 
 <input type="textbox" class="title" placeholder="Title of Page">
 <span>
@@ -164,9 +168,9 @@ function handleNewBookmarkSubmit(){
         e.preventDefault()
         let newURL = $('.inputbm').val()
         let description = $('.description').val()
-        let rating
+        let rating = $('.checked').attr("id")
         if (rating != undefined)
-        rating = parseInt($('.checked').attr("id").substring(1))
+        rating = rating.substring(1)
         //figure out how to make rating optional
         let title = $('.title').val()
         api.addBookmark(newURL, description, rating, title).then(data => {
@@ -181,6 +185,7 @@ function handleNewBookmarkSubmit(){
     )
 }
 function handleError(err){
+    store.adding = true;
     store.items.error = err.message
     render()
 }
