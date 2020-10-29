@@ -31,32 +31,50 @@ function generateHTMLTemplate(items){
     return result
 }
 
-function handleClickOnStars(){
-    $('body').on('click', '.stars', function(e){
-        $(this).siblings().removeClass("checked")
-        $(this).addClass("checked")
-        let currId = parseInt($(this).attr('id').substring(1), 10)
-        for (let i = 0; i < currId; i++){
-            $(`#n${i+1}`).attr('src', 'src/photos/full_star.png')
-        }
-    })
-}
+// function handleClickOnStars(){
+//     $('body').on('click', '.stars', function(e){
+//         $(this).siblings().removeClass("checked")
+//         $(this).addClass("checked")
+//         let currId = parseInt($(this).attr('id').substring(1), 10)
+//         for (let i = 0; i < currId; i++){
+//             $(`#n${i+1}`).attr('src', 'src/photos/full_star.png')
+//         }
+//     })
+// }
+
+// function handleHoverOverStars(){
+//     $('body').on('mouseover', '.stars', function(e){
+//         $('.stars').css('cursor', 'pointer')
+//         let currId = parseInt($(this).attr('id').substring(1), 10)
+//         for (let i = 0; i < currId; i++){
+//             $(`#n${i+1}`).attr('src', 'src/photos/full_star.png')
+//         }
+//     })
+//     $('body').on('mouseout', '.stars', function(e){
+//     if ($('.stars').hasClass('checked'))
+//     $('.checked').nextAll().attr('src', 'src/photos/emptystar2.png')
+//     else $('.stars').attr('src', 'src/photos/emptystar2.png')
+//     //settimeout to delay the turning of white just for a bit? to make the stars not go blank every time you hover between them?
+//     })
+// }
 
 function handleHoverOverStars(){
     $('body').on('mouseover', '.stars', function(e){
-        $('.stars').css('cursor', 'pointer')
         let currId = parseInt($(this).attr('id').substring(1), 10)
-        for (let i = 0; i < currId; i++){
-            $(`#n${i+1}`).attr('src', 'src/photos/full_star.png')
-        }
-    })
-    $('body').on('mouseout', '.stars', function(e){
-    if ($('.stars').hasClass('checked'))
-    $('.checked').nextAll().attr('src', 'src/photos/emptystar2.png')
-    else $('.stars').attr('src', 'src/photos/emptystar2.png')
-    //settimeout to delay the turning of white just for a bit? to make the stars not go blank every time you hover between them?
-    })
+        store.currentRating = currId
+        render()
+    })  
 }
+
+function handleReleaseFromStars(){
+    console.log("hello")
+    $('body').on('mouseout', '.stars', function(e){
+        console.log("hello")
+        store.currentRating = null
+        render()
+        })
+}
+
 
 function handleNewClick(){
 $('body').on('click', '.new', function(e){
@@ -125,13 +143,14 @@ newCreationTemplate +=`<form class="new-bookmark">
 <input type="textbox" name="inputbookmark" class="inputbm" placeholder="Place link here...">
 <div class="entry-selected" style="border: none"> 
 <input type="textbox" class="title" placeholder="Title of Page">
-<span>
-    <img class="stars" id="n1" src="src/photos/emptystar2.png">
-    <img class="stars" id="n2" src="src/photos/emptystar2.png">
-    <img class="stars" id="n3" src="src/photos/emptystar2.png">
-    <img class="stars" id="n4" src="src/photos/emptystar2.png">
-    <img class="stars" id="n5" src="src/photos/emptystar2.png">
-</span>
+<span>`
+
+for (let i = 0; i < 5; i++){
+    if (store.currentRating != null && i < store.currentRating) newCreationTemplate += `<img class="stars" id="n${i+1}" src="src/photos/full_star.png"></img>`
+    else newCreationTemplate += `<img class="stars" id="n${i+1}" src="src/photos/emptystar2.png">`
+}
+
+newCreationTemplate += `</span>
 <textarea class="description" placeholder="Add a description (optional)"></textarea>
 <div class="e-buttons">
 <button class="cancel">Cancel</button>
@@ -147,7 +166,6 @@ function handleDoneEditing(){
        let id = $(this).siblings(".nospacing").attr("data-item-id")
        let item = store.findById(id)
        let description = $('.editing').val()
-       console.log(description)
        api.findAndUpdate(id, {desc: description}).then(
         res =>{
             item.editing = false
@@ -258,7 +276,7 @@ function handleEventListeners(){
     handleNewBookmarkSubmit()
     handleHoverOverStars()
     handleNewClick()
-    handleClickOnStars()
+    //handleClickOnStars()
     handleExpansion()
     handleDelete()
     handleFilter()
@@ -266,6 +284,7 @@ function handleEventListeners(){
     handleCancel()
     handleEdit()
     handleDoneEditing()
+    handleReleaseFromStars()
 }
 
 export default{

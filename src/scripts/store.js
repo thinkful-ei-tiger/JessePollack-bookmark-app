@@ -2,7 +2,8 @@ const items = {
     bookmarks: [],
     adding: false,
     error: null,
-    filter: 0
+    filter: 0, 
+    currentRating: {rating: null, confirmed: false}
   };
 
   function findById(id){
