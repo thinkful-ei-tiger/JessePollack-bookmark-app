@@ -21,8 +21,8 @@ function generateHTMLTemplate(items){
     <div class="bookmarks">`
     items.forEach((item) =>{
         if (item.rating >= store.items.filter){
-        if (item.expanded) result += generateExpandedView(item)
-        else result += generateEntryTemplate(item) 
+        result += generateEntryTemplate(item)
+        if (item.expanded) result += generateExpandedView(item) 
         }
     })
     result += ` </div>
@@ -88,19 +88,20 @@ function generateEntryTemplate(item){
     }
 
 function generateExpandedView(item){
-    console.log(item.url)
-    let newEntry = `<div class="entry-selected">
-    <div class="entry" style="border: none" data-item-id=${item.id}>
-    <button onclick="location.href='${item.url}';">Visit Site</button>
+    let newEntry = `<div class="entry-selected max-height">
+    <div class="nospacing" style="border: none" data-item-id=${item.id}>
+    <img class="edit" src="src/photos/edit_icon.png">
+    <button class="visit" onclick="location.href='${item.url}';">Visit Site</button>
     `
-       if (item.rating != undefined)
-       newEntry+= `<span>
-            ${item.rating} <img src="src/photos/full_star.png">
-        </span>`
        
-    newEntry +=`</div>
-    <p>${item.desc}</p>
-    <img class="delete" src="src/photos/trashcan.png">
+    newEntry +=`</div>`
+    if (!item.editing) newEntry += `<p>${item.desc}</p>`
+    else newEntry += `<input class="editing" type=textarea value=${item.desc}>
+         <button class="done-editing">Done</button>
+         ` 
+        
+
+   newEntry += `<img class="delete" src="src/photos/trashcan.png">
 </div>`
 
 return newEntry
@@ -141,6 +142,23 @@ newCreationTemplate +=`<form class="new-bookmark">
 return newCreationTemplate
 }
 
+function handleDoneEditing(){
+    $('body').on('click', '.done-editing', function(e){
+       let id = $(this).siblings(".nospacing").attr("data-item-id")
+       let item = store.findById(id)
+       let description = $('.editing').val()
+       console.log(description)
+       api.findAndUpdate(id, {desc: description}).then(
+        res =>{
+            item.editing = false
+            item.desc = description
+            render()
+        }
+
+       )
+    })
+}
+
 function handleExpansion(){
     $('body').on('click', '.entry', function(){
         let id = $(this).attr("data-item-id")
@@ -153,7 +171,6 @@ function handleExpansion(){
 function handleDelete(){
     $('body').on('click', '.delete', function(e){
        let id =  $(this).siblings(".entry").attr("data-item-id")
-       console.log(id)
        api.deleteItem(id).then(() => {
         store.deleteItem(id)
         render()
@@ -162,10 +179,17 @@ function handleDelete(){
     })
 }
 
+function handleEdit(){
+    $('body').on('click', '.edit', function(e){
+        let item = store.findById($(this).parent().attr("data-item-id"))
+        item.editing = true;
+        render()
+    })
+}
+
 function handleCancel(){
     $('body').on('click', '.cancel', function(e){
         e.preventDefault()
-        console.log("hello")
         store.adding=false;
         render()
     })
@@ -184,6 +208,7 @@ function handleNewBookmarkSubmit(){
         let title = $('.title').val()
         api.addBookmark(newURL, description, rating, title).then(data => {
             data.expanded = false;
+            data.editing = false;
             store.addItem(data)
             store.adding = false;
             render()
@@ -215,7 +240,6 @@ function handleX(){
 function initialize(){
     api.getItems().then(data =>{
         data.forEach(current =>{ store.items.bookmarks.push(current)
-            console.log(current)
         })
         render()
     }).catch(err => console.log(err.message))
@@ -240,6 +264,8 @@ function handleEventListeners(){
     handleFilter()
     handleX()
     handleCancel()
+    handleEdit()
+    handleDoneEditing()
 }
 
 export default{

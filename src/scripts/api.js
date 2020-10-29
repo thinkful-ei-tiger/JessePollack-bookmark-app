@@ -31,8 +31,14 @@ function deleteItem(id){
     return listAPIfetch(`${BASE_URL}/${id}`, {method: 'DELETE'})
 }
 
+function findAndUpdate(id, input){
+    input = JSON.stringify(input)
+    return listAPIfetch(`${BASE_URL}/${id}`, {method: 'PATCH', headers: new Headers({'Content-Type': 'application/json'}), body: input})
+}
+
 export default{
     addBookmark,
     getItems,
-    deleteItem
+    deleteItem,
+    findAndUpdate
 }

@@ -40,12 +40,14 @@ img{
     flex-direction: column;
 }
 
-.entry{
+.entry, .nospacing{
 display: flex;
 justify-content: space-between;
 border: 2px solid black;
+border-bottom: none;
 padding: 5px 10% 0px 10%;
 }
+
 
 span{
     flex-basis: 50%;
@@ -61,10 +63,21 @@ button:hover{
 
 .entry-selected{
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     flex-direction: column;
     border: 2px solid;
+    border-top: none;
+    border-bottom: none;
     }
+
+.entry:last-child{
+    border-bottom: 2px solid black;
+}
+
+.max-height{
+    max-height: 400px;
+    overflow: auto;
+}
 
 label{
     display: block;
@@ -82,6 +95,10 @@ input[type=textarea]{
 
 .delete{
     margin-left: 95%;
+}
+
+.visit{
+    margin-left: 0px;
 }
 
 .error{
@@ -110,9 +127,13 @@ input[type=textbox]{
 
 }
 
+
+
 .title{
 margin-top: 25px;
 }
+
+
 
 @media only screen and (min-width: 800px) {
     body {
@@ -127,5 +148,14 @@ margin-top: 25px;
     .create, .cancel{
         width:50%;
     }
+    .nospacing{
+        display: flex;
+        justify-content: flex-start;
+    }
+
+    .edit{
+        margin-right: 23%
+    }
+
   }
   
