@@ -35,14 +35,17 @@ function handleHoverOverStars(){
     $('body').on('mouseover', '.stars', function(e){
         e.stopPropagation();
         let currId = parseInt($(this).attr('id').substring(1), 10)
-        let cuidId = $(this).parents(".entry").attr("data-item-id")
         if (currId != store.items.currentRating.rating){
+            store.items.currentRating.rating = currId
+        if (!store.items.adding){
+        let cuidId = $(this).parents(".entry").attr("data-item-id")
         let item = store.findById(cuidId)
         item.editingRating = true;
-        store.items.currentRating.rating = currId
-        render()
         }
-    })  
+        render()
+    }
+        }
+    )  
 }
 
 function handleReleaseFromStars(){
@@ -56,9 +59,19 @@ function handleReleaseFromStars(){
 
 function handleClickOnStars(){
     $('body').on('click', '.stars', function(e){
+        e.stopPropagation()
         store.items.currentRating.selected = store.items.currentRating.rating;
-        render
-
+        if (!store.items.adding){
+        let cuidId = $(this).parents(".entry").attr("data-item-id")
+        let item = store.findById(cuidId)
+        api.findAndUpdate(cuidId, {rating:store.items.currentRating.selected}).then(() =>{  
+            item.rating = store.items.currentRating.selected
+            item.editingRating = false
+            render()
+        })
+        }else render()
+    
+    
     })
 }
 
@@ -78,7 +91,6 @@ function generateEntryTemplate(item){
         if (item.rating != undefined){
         let star
             for (let i = 0; i < 5; i++){
-                console.log(item.editingRating)
                 if (i < (item.editingRating? store.items.currentRating.rating : item.rating)) star="full_star.png"
                 else star = "emptystar2.png"
                 newEntry+=  `<img class ="stars" src="src/photos/${star}" id="n${i + 1}"}></img>`
@@ -187,8 +199,6 @@ function handleDelete(){
 
 function handleSwitchEntries(){
     $('body').on('mouseout', '.entry', function(){
-        store.items.currentRating.rating = 0;
-        store.items.currentRating.selected = 0;
         store.items.bookmarks.forEach((current) => current.editingRating = false)
         render()
     })
