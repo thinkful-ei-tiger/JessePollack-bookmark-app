@@ -12,7 +12,7 @@ function generateHTMLTemplate(items){
       ` 
       for (let i = 0; i < 6; i++){
           let selected = ""
-          if (i == store.items.filter) selected = "selected"
+          if (i == $("#rating").val()) selected = "selected"
           result += `<option value=${i} ${selected}>${i}</option>`
           selected =""
       }
@@ -77,6 +77,8 @@ function handleClickOnStars(){
 
 function handleNewClick(){
 $('body').on('click', '.new', function(e){
+    store.items.currentRating.rating = 0;
+    store.items.currentRating.selected = 0;
     store.items.adding = true
     render()
 })
@@ -215,7 +217,7 @@ function handleEdit(){
 function handleCancel(){
     $('body').on('click', '.cancel', function(e){
         e.preventDefault()
-        store.adding=false;
+        store.items.adding=false;
         render()
     })
 }
