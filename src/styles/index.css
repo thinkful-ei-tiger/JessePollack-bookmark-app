@@ -54,3 +54,6 @@ input[type=textarea]{
     height: 100px;
 }
 
+.delete{
+    margin-left: 95%;
+}

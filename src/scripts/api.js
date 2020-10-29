@@ -10,13 +10,16 @@ function listAPIfetch(...inputs){
             error.message = result.message
             return Promise.reject(error)
         }
-        console.log(result)
         return result
     })
 }
 
 function addBookmark(urlInput, descrip, rate, titleInput){
-    let input = JSON.stringify({title: titleInput, url: urlInput, desc: descrip, rating: rate})
+    let input = {title: titleInput, url: urlInput, desc: descrip, rating: rate}
+    for (let key in input){
+        if (input[key] == undefined) delete input[key]
+    }
+    input = JSON.stringify(input)
     return listAPIfetch(BASE_URL, {method: 'POST', headers: new Headers({'Content-Type': 'application/json'}), body: input})
 }
 
@@ -24,6 +27,12 @@ function getItems(){
     return listAPIfetch(BASE_URL)
 }
 
+function deleteItem(id){
+    return listAPIfetch(`${BASE_URL}/${id}`, {method: 'DELETE'})
+}
+
 export default{
-    addBookmark
+    addBookmark,
+    getItems,
+    deleteItem
 }
