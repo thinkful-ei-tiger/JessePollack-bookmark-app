@@ -8,7 +8,7 @@ function generateHTMLTemplate(items){
     <div class="buttons">
         <button class="new">New</button>
         <button type="dropdown" class="filter">Filter By</button>
-        <select id="rating" name="rating">
+        <select id="rating" name="rating"> 
       ` 
       for (let i = 0; i < 6; i++){
           let selected = ""
@@ -52,8 +52,8 @@ function handleHoverOverStars(){
     })
     $('body').on('mouseout', '.stars', function(e){
     if ($('.stars').hasClass('checked'))
-    $('.checked').nextAll().attr('src', 'src/photos/emptystar.png')
-    else $('.stars').attr('src', 'src/photos/emptystar.png')
+    $('.checked').nextAll().attr('src', 'src/photos/emptystar2.png')
+    else $('.stars').attr('src', 'src/photos/emptystar2.png')
     //settimeout to delay the turning of white just for a bit? to make the stars not go blank every time you hover between them?
     })
 }
@@ -75,7 +75,7 @@ function generateEntryTemplate(item){
         let star
             for (let i = 0; i < 5; i++){
                 if (i < item.rating) star="full_star.png"
-                else star = "emptystar.png"
+                else star = "emptystar2.png"
                 newEntry+=  `<img src="src/photos/${star}"></img>`
             }
         }
@@ -122,19 +122,19 @@ if (store.items.error) newCreationTemplate += error
 newCreationTemplate +=`<form class="new-bookmark">
 <label for="inputbookmark">Add New Bookmark:</label>
 <input type="textbox" name="inputbookmark" class="inputbm" placeholder="Place link here...">
-<div class="entry-selected"> 
+<div class="entry-selected" style="border: none"> 
 <input type="textbox" class="title" placeholder="Title of Page">
 <span>
-    <img class="stars" id="n1" src="src/photos/emptystar.png">
-    <img class="stars" id="n2" src="src/photos/emptystar.png">
-    <img class="stars" id="n3" src="src/photos/emptystar.png">
-    <img class="stars" id="n4" src="src/photos/emptystar.png">
-    <img class="stars" id="n5" src="src/photos/emptystar.png">
+    <img class="stars" id="n1" src="src/photos/emptystar2.png">
+    <img class="stars" id="n2" src="src/photos/emptystar2.png">
+    <img class="stars" id="n3" src="src/photos/emptystar2.png">
+    <img class="stars" id="n4" src="src/photos/emptystar2.png">
+    <img class="stars" id="n5" src="src/photos/emptystar2.png">
 </span>
 <input type="textarea" class="description" placeholder="Add a description (optional)">
 <div class="e-buttons">
-<button>Cancel</button>
-<button type="submit">Create</button>
+<button class="cancel">Cancel</button>
+<button class="create" type="submit">Create</button>
 </div>
 </div>
 </form>`
@@ -159,6 +159,15 @@ function handleDelete(){
         render()
        }
         )
+    })
+}
+
+function handleCancel(){
+    $('body').on('click', '.cancel', function(e){
+        e.preventDefault()
+        console.log("hello")
+        store.adding=false;
+        render()
     })
 }
 
@@ -230,6 +239,7 @@ function handleEventListeners(){
     handleDelete()
     handleFilter()
     handleX()
+    handleCancel()
 }
 
 export default{

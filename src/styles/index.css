@@ -63,6 +63,7 @@ button:hover{
     display: flex;
     justify-content: space-between;
     flex-direction: column;
+    border: 2px solid;
     }
 
 label{
@@ -84,9 +85,10 @@ input[type=textarea]{
 }
 
 .error{
+    border: 2px solid red;
     margin: 0% 6%;
     padding: 2% 5% 5% 5%;
-    background-color: #F94A5F;
+    background-color: #e77e90;
     border-radius: 25px;
     width: 80%;
 }
@@ -111,3 +113,19 @@ input[type=textbox]{
 .title{
 margin-top: 25px;
 }
+
+@media only screen and (min-width: 800px) {
+    body {
+      padding: 2% 20%;
+    }
+
+    button{
+        padding: 1%;
+        width: 45%
+    }
+
+    .create, .cancel{
+        width:50%;
+    }
+  }
+  
