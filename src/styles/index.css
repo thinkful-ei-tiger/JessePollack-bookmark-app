@@ -31,7 +31,7 @@ border: 2px solid black;
 padding: 5px 10% 0px 10%;
 }
 
-.bookmarks :hover, .buttons :hover{
+.bookmarks:hover, .buttons :hover{
     cursor: pointer;
 }
 
@@ -56,4 +56,20 @@ input[type=textarea]{
 
 .delete{
     margin-left: 95%;
+}
+
+.error{
+    margin: 0% 6%;
+    padding: 2% 5% 5% 5%;
+    background-color: #F94A5F;
+    border-radius: 25px;
+    width: 80%;
+}
+
+.X{
+    margin-left: 100%;
+}
+
+.X:hover{
+    cursor: pointer;
 }

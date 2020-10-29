@@ -88,10 +88,13 @@ function generateExpandedView(item){
     let newEntry = `<div class="entry-selected">
     <div class="entry" style="border: none" data-item-id=${item.id}>
     <button onclick="location.href='${item.url}';">Visit Site</button>
-        <span>
+    `
+       if (item.rating != undefined)
+       newEntry+= `<span>
             ${item.rating} <img src="src/photos/full_star.png">
-        </span>
-    </div>
+        </span>`
+       
+    newEntry +=`</div>
     <p>${item.desc}</p>
     <img class="delete" src="src/photos/trashcan.png">
 </div>`
@@ -100,8 +103,19 @@ return newEntry
 }
 
 function generateNewCreationTemplate(){
-let newCreationTemplate =  `<h1>My Bookmarks</h1>
-<form class="new-bookmark">
+let newCreationTemplate =  `<h1>My Bookmarks</h1>`
+let error=`<h1>My Bookmarks</h1>
+<div class="error">
+    <div class="X">
+        X
+    </div>
+    ${store.items.error}
+
+</div>`
+
+if (store.items.error) newCreationTemplate += error
+
+newCreationTemplate +=`<form class="new-bookmark">
 <label for="inputbookmark">Add New Bookmark:</label>
 <input type="textbox" name="inputbookmark" class="inputbm">
 <div class="entry-selected"> 
@@ -160,17 +174,26 @@ function handleNewBookmarkSubmit(){
             store.addItem(data)
             store.adding = false;
             render()
-        }).catch(err => console.log(err.message))
+        }).catch(err => handleError(err))
 
     }
-
     
     )
+}
+function handleError(err){
+    store.items.error = err.message
+    render()
 }
 
 function handleFilter(){
     $('body').on('click', '.filter', function(e){
         store.items.filter = $('#rating').val()
+        render()
+    })
+}
+function handleX(){
+    $('body').on('click', ".X", function(e){
+        store.items.error = null
         render()
     })
 }
@@ -185,7 +208,7 @@ function initialize(){
 }
 
 function render(){
-    if (!store.adding){
+    if (!store.adding&&!store.items.error){
    $('body').html(generateHTMLTemplate(store.items.bookmarks))
     }
      else
@@ -201,6 +224,7 @@ function handleEventListeners(){
     handleExpansion()
     handleDelete()
     handleFilter()
+    handleX()
 }
 
 export default{
