@@ -31,38 +31,14 @@ function generateHTMLTemplate(items){
     return result
 }
 
-// function handleClickOnStars(){
-//     $('body').on('click', '.stars', function(e){
-//         $(this).siblings().removeClass("checked")
-//         $(this).addClass("checked")
-//         let currId = parseInt($(this).attr('id').substring(1), 10)
-//         for (let i = 0; i < currId; i++){
-//             $(`#n${i+1}`).attr('src', 'src/photos/full_star.png')
-//         }
-//     })
-// }
-
-// function handleHoverOverStars(){
-//     $('body').on('mouseover', '.stars', function(e){
-//         $('.stars').css('cursor', 'pointer')
-//         let currId = parseInt($(this).attr('id').substring(1), 10)
-//         for (let i = 0; i < currId; i++){
-//             $(`#n${i+1}`).attr('src', 'src/photos/full_star.png')
-//         }
-//     })
-//     $('body').on('mouseout', '.stars', function(e){
-//     if ($('.stars').hasClass('checked'))
-//     $('.checked').nextAll().attr('src', 'src/photos/emptystar2.png')
-//     else $('.stars').attr('src', 'src/photos/emptystar2.png')
-//     //settimeout to delay the turning of white just for a bit? to make the stars not go blank every time you hover between them?
-//     })
-// }
-
 function handleHoverOverStars(){
     $('body').on('mouseover', '.stars', function(e){
         e.stopPropagation();
         let currId = parseInt($(this).attr('id').substring(1), 10)
+        let cuidId = $(this).parents(".entry").attr("data-item-id")
         if (currId != store.items.currentRating.rating){
+        let item = store.findById(cuidId)
+        item.editingRating = true;
         store.items.currentRating.rating = currId
         render()
         }
@@ -82,13 +58,13 @@ function handleClickOnStars(){
     $('body').on('click', '.stars', function(e){
         store.items.currentRating.selected = store.items.currentRating.rating;
         render
-        console.log()
+
     })
 }
 
 function handleNewClick(){
 $('body').on('click', '.new', function(e){
-    store.adding = true
+    store.items.adding = true
     render()
 })
 }
@@ -102,9 +78,10 @@ function generateEntryTemplate(item){
         if (item.rating != undefined){
         let star
             for (let i = 0; i < 5; i++){
-                if (i < item.rating) star="full_star.png"
+                console.log(item.editingRating)
+                if (i < (item.editingRating? store.items.currentRating.rating : item.rating)) star="full_star.png"
                 else star = "emptystar2.png"
-                newEntry+=  `<img src="src/photos/${star}"></img>`
+                newEntry+=  `<img class ="stars" src="src/photos/${star}" id="n${i + 1}"}></img>`
             }
         }
         else{
@@ -148,11 +125,12 @@ let error=`
 
 if (store.items.error) newCreationTemplate += error
 
+
 newCreationTemplate +=`<form class="new-bookmark">
 <label for="inputbookmark">Add New Bookmark:</label>
-<input type="textbox" name="inputbookmark" class="inputbm" placeholder="Place link here...">
+<input type="textbox" name="inputbookmark" class="inputbm" placeholder="Place link here..." value=${$(".inputbm").val() || ''}>
 <div class="entry-selected" style="border: none"> 
-<input type="textbox" class="title" placeholder="Title of Page">
+<input type="textbox" class="title" placeholder="Title of Page" value=${$(".title").val() || ''}>
 <span>`
 
 for (let i = 0; i < 5; i++){
@@ -161,7 +139,7 @@ for (let i = 0; i < 5; i++){
 }
 
 newCreationTemplate += `</span>
-<textarea class="description" placeholder="Add a description (optional)"></textarea>
+<textarea class="description" placeholder="Add a description (optional)">${$(".description").val() || ''}</textarea>
 <div class="e-buttons">
 <button class="cancel">Cancel</button>
 <button class="create" type="submit">Create</button>
@@ -198,12 +176,21 @@ function handleExpansion(){
 
 function handleDelete(){
     $('body').on('click', '.delete', function(e){
-       let id =  $(this).siblings(".entry").attr("data-item-id")
+       let id =  $(this).siblings().attr("data-item-id")
        api.deleteItem(id).then(() => {
         store.deleteItem(id)
         render()
        }
         )
+    })
+}
+
+function handleSwitchEntries(){
+    $('body').on('mouseout', '.entry', function(){
+        store.items.currentRating.rating = 0;
+        store.items.currentRating.selected = 0;
+        store.items.bookmarks.forEach((current) => current.editingRating = false)
+        render()
     })
 }
 
@@ -229,16 +216,18 @@ function handleNewBookmarkSubmit(){
         e.preventDefault()
         let newURL = $('.inputbm').val()
         let description = $('.description').val()
-        let rating = $('.checked').attr("id")
-        if (rating != undefined)
-        rating = rating.substring(1)
+        let rating
+        if (store.items.currentRating.selected > 0) rating = store.items.currentRating.selected
         //figure out how to make rating optional
         let title = $('.title').val()
         api.addBookmark(newURL, description, rating, title).then(data => {
             data.expanded = false;
             data.editing = false;
+            data.editingRating = false;
             store.addItem(data)
-            store.adding = false;
+            store.items.adding = false;
+            store.items.currentRating.rating = 0;
+            store.items.currentRating.selected = 0;
             render()
         }).catch(err => handleError(err))
 
@@ -246,6 +235,21 @@ function handleNewBookmarkSubmit(){
     
     )
 }
+
+//Because the page is re-rendering every time a star is hightlighted or selected, it is necessary to save the drafts
+//
+// function handleTyping(){
+//     $('body').on('input', ".title", function(e){
+//         store.items.drafts.title = $('.title').val()
+//     })
+//     $('body').on('input', ".inputbm", function(e){
+//         store.items.drafts.url = $('.inputbm').val()
+//     })
+//     $('body').on('input', ".description", function(e){
+//         store.items.drafts.desc = $('.description').val()
+//     })
+// }
+
 function handleError(err){
     store.adding = true;
     store.items.error = err.message
@@ -265,16 +269,16 @@ function handleX(){
     })
 }
 
-// function initialize(){
-//     api.getItems().then(data =>{
-//         data.forEach(current =>{ store.items.bookmarks.push(current)
-//         })
-//         render()
-//     }).catch(err => console.log(err.message))
-// }
+function initialize(){
+    api.getItems().then(data =>{
+        data.forEach(current =>{ store.items.bookmarks.push(current)
+        })
+        render()
+    }).catch(err => console.log(err.message))
+}
 
 function render(){
-    if (!store.adding&&!store.items.error){
+    if (!store.items.adding&&!store.items.error){
    $('body').html(generateHTMLTemplate(store.items.bookmarks))
     }
      else
@@ -282,7 +286,7 @@ function render(){
 }
 
 function handleEventListeners(){
-    // initialize()
+    initialize()
     handleNewBookmarkSubmit()
     handleHoverOverStars()
     handleReleaseFromStars()
@@ -295,6 +299,7 @@ function handleEventListeners(){
     handleCancel()
     handleEdit()
     handleDoneEditing()
+    handleSwitchEntries()
 }
 
 export default{

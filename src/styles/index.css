@@ -73,7 +73,12 @@ button:hover{
     border: 2px solid;
     border-top: none;
     border-bottom: none;
+    cursor: default;
     }
+
+.entry-selected:last-child{
+    border-bottom: 1px solid black;
+}
 
 .entry:last-child{
     border-bottom: 2px solid black;
