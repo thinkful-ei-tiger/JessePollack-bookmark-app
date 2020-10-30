@@ -159,7 +159,7 @@ newCreationTemplate +=`<form class="new-bookmark">
 
 for (let i = 0; i < 5; i++){
     if ( i < store.items.currentRating.rating) newCreationTemplate += `<img class="stars" id="n${i+1}" src="photos/full_star.png">`
-    else newCreationTemplate += `<img class="stars" id="n${i+1}" src="src/styles/photos/emptystar2.png">`
+    else newCreationTemplate += `<img class="stars" id="n${i+1}" src="photos/emptystar2.png">`
 }
 
 newCreationTemplate += `</span>
