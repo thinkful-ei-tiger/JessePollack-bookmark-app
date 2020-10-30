@@ -48,6 +48,15 @@ function handleHoverOverStars(){
     )  
 }
 
+function handleEditNoRating(){
+    $('body').on('mouseover', '.no-rating', function(e){
+        let cuidId = $(this).parents(".entry").attr("data-item-id")
+        let item = store.findById(cuidId)
+        item.editingRating = true;
+        render()
+    })
+}
+
 function handleReleaseFromStars(){
     $('body').on('mouseout', '.stars', function(e){
         if (store.items.currentRating.selected != store.items.currentRating.rating){
@@ -90,7 +99,7 @@ function generateEntryTemplate(item){
         <div class="entry" data-item-id=${item.id}>
         <span>${item.title.substring(0,14)}${ellipses}</span>
         <span>`
-        if (item.rating != undefined){
+        if (item.rating != undefined || item.editingRating){
         let star
             for (let i = 0; i < 5; i++){
                 if (i < (item.editingRating? store.items.currentRating.rating : item.rating)) star="full_star.png"
@@ -99,7 +108,7 @@ function generateEntryTemplate(item){
             }
         }
         else{
-            newEntry += `No Rating`
+            newEntry += `<span class="no-rating">No Rating</span>`
         }
       newEntry+= `</span>
     </div>`
@@ -232,6 +241,7 @@ function handleNewBookmarkSubmit(){
         if (store.items.currentRating.selected > 0) rating = store.items.currentRating.selected
         //figure out how to make rating optional
         let title = $('.title').val()
+        store.items.error = null
         api.addBookmark(newURL, description, rating, title).then(data => {
             data.expanded = false;
             data.editing = false;
@@ -312,6 +322,7 @@ function handleEventListeners(){
     handleEdit()
     handleDoneEditing()
     handleSwitchEntries()
+    handleEditNoRating()
 }
 
 export default{
