@@ -105,7 +105,7 @@ function generateEntryTemplate(item){
             for (let i = 0; i < 5; i++){
                 if (i < (item.editingRating? store.items.currentRating.rating : item.rating)) star="full_star.png"
                 else star = "emptystar2.png"
-                newEntry+=  `<img class ="stars" src="src/photos/${star}" id="n${i + 1}"}></img>`
+                newEntry+=  `<img class ="stars" src="src/styles/photos/${star}" id="n${i + 1}"}></img>`
             }
         }
         else{
@@ -119,7 +119,7 @@ function generateEntryTemplate(item){
 function generateExpandedView(item){
     let newEntry = `<div class="entry-selected max-height">
     <div class="nospacing" style="border: none" data-item-id=${item.id}>
-    <img class="edit" src="src/photos/edit_icon.png">
+    <img class="edit" src="src/styles/photos/edit_icon.png">
     <button class="visit" onclick="window.open('${item.url}','_blank')">Visit Site</button>
     `
        
@@ -130,7 +130,7 @@ function generateExpandedView(item){
          ` 
         
 
-   newEntry += `<img class="delete" src="src/photos/trashcan.png">
+   newEntry += `<img class="delete" src="src/styles/photos/trashcan.png">
 </div>`
 
 return newEntry
@@ -158,8 +158,8 @@ newCreationTemplate +=`<form class="new-bookmark">
 <span>`
 
 for (let i = 0; i < 5; i++){
-    if ( i < store.items.currentRating.rating) newCreationTemplate += `<img class="stars" id="n${i+1}" src="src/photos/full_star.png">`
-    else newCreationTemplate += `<img class="stars" id="n${i+1}" src="src/photos/emptystar2.png">`
+    if ( i < store.items.currentRating.rating) newCreationTemplate += `<img class="stars" id="n${i+1}" src="src/styles/photos/full_star.png">`
+    else newCreationTemplate += `<img class="stars" id="n${i+1}" src="src/styles/photos/emptystar2.png">`
 }
 
 newCreationTemplate += `</span>

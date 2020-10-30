@@ -7,7 +7,7 @@ html, body{
 }
 
 body{
-    background-image: url("../photos/background.jpg")
+    background-image: url("photos/background.jpg")
 }
 button{
     width: 40%;
@@ -164,6 +164,7 @@ input[type=textbox]{
 .title{
 margin-top: 25px;
 }
+
 
 
 
