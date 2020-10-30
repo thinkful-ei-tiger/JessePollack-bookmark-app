@@ -70,6 +70,7 @@ function handleClickOnStars(){
     $('body').on('click', '.stars', function(e){
         e.stopPropagation()
         store.items.currentRating.selected = store.items.currentRating.rating;
+        store.items.currentRating.rating = 0
         if (!store.items.adding){
         let cuidId = $(this).parents(".entry").attr("data-item-id")
         let item = store.findById(cuidId)
@@ -210,6 +211,7 @@ function handleDelete(){
 
 function handleSwitchEntries(){
     $('body').on('mouseout', '.entry', function(){
+        store.items.currentRating.rating = 0
         store.items.bookmarks.forEach((current) => current.editingRating = false)
         render()
     })
