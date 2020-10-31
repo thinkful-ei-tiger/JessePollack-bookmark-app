@@ -4,7 +4,7 @@ import $ from 'jquery'
 
 
 function generateHTMLTemplate(items){
-    let result = `<h1> My Bookmarks</h1>
+    let result = `<header><h1> My Bookmarks</h1></header>
     <div class="buttons">
         <button class="new">New</button>
         <button type="dropdown" class="filter">Filter By</button>
@@ -25,9 +25,8 @@ function generateHTMLTemplate(items){
         if (item.expanded) result += generateExpandedView(item) 
         }
     })
-    result += ` </div>
-    </body>
-    </html>`
+    result += `</div>
+    `
     return result
 }
 
@@ -110,7 +109,7 @@ function generateEntryTemplate(item){
     let ellipses =''
     if (item.title.length > 14) ellipses = '...'
     let newEntry=`
-        <div class="entry" data-item-id=${item.id}>
+        <section class="entry" data-item-id=${item.id}>
         <span>${item.title.substring(0,14)}${ellipses}</span>
         <span>`
         if (item.rating != undefined || item.editingRating){
@@ -118,39 +117,39 @@ function generateEntryTemplate(item){
             for (let i = 0; i < 5; i++){
                 if (i < (item.editingRating? store.items.currentRating.rating : item.rating)) star="full_star.png"
                 else star = "emptystar2.png"
-                newEntry+=  `<img class ="stars" src="../../docs/photos/${star}" id="n${i + 1}"}></img>`
+                newEntry+=  `<img class ="stars" src="photos/${star}" id="n${i + 1}"}></img>`
             }
         }
         else{
             newEntry += `<span class="no-rating">No Rating</span>`
         }
       newEntry+= `</span>
-    </div>`
+    </section>`
     return newEntry
     }
 
 function generateExpandedView(item){
-    let newEntry = `<div class="entry-selected max-height">
+    let newEntry = `<details class="entry-selected max-height">
     <div class="nospacing" style="border: none" data-item-id=${item.id}>
-    <img class="edit" src="../../docs/photos/edit_icon.png">
+    <img class="edit" src="photos/edit_icon.png">
     <button class="visit" onclick="window.open('${item.url}','_blank')">Visit Site</button>
     `
        
-    newEntry +=`</div>`
+    newEntry +=`</details>`
     if (!item.editing) newEntry += `<p>${item.desc}</p>`
     else newEntry += `<textarea class="editing">${item.desc}</textarea>
          <button class="done-editing">Done</button>
          ` 
         
 
-   newEntry += `<img class="delete" src="../../docs/photos/trashcan.png">
+   newEntry += `<img class="delete" src="photos/trashcan.png">
 </div>`
 
 return newEntry
 }
 
 function generateNewCreationTemplate(){
-let newCreationTemplate =  `<h1>My Bookmarks</h1>`
+let newCreationTemplate =  `<header><h1>My Bookmarks</h1></header>`
 let error=`
 <div class="error">
     <div class="X">
@@ -164,22 +163,25 @@ if (store.items.error) newCreationTemplate += error
 
 
 newCreationTemplate +=`<form class="new-bookmark">
-<label for="inputbookmark">Add New Bookmark:</label>
+<label for="inputbookmark">Place link here</label>
 <input type="textbox" name="inputbookmark" class="inputbm" placeholder="Place link here..." value=${$(".inputbm").val() || ''}>
 <div class="entry-selected" style="border: none"> 
-<input type="textbox" class="title" placeholder="Title of Page" value=${$(".title").val() || ''}>
+<label for="title">Place title here</label>
+<input name="title" type="textbox" class="title" placeholder="Title of Page" value=${$(".title").val() || ''}>
+<label for="stars">Rate this bookmark</label>
 <span>`
 for (let i = 0; i < 5; i++){
-    if ( i < store.items.currentRating.rating) newCreationTemplate += `<input type="image"class="stars" id="n${i+1}" src="../../docs/photos/full_star.png"></image>`
-    else newCreationTemplate += `<input type="image" class="stars" id="n${i+1}" src="../../docs/photos/emptystar2.png">`
+    if ( i < store.items.currentRating.rating) newCreationTemplate += `<input name="rating" type="image"class="stars" id="n${i+1}" src="docs/photos/full_star.png"></image>`
+    else newCreationTemplate += `<input type="image" class="stars" id="n${i+1}" src="docs/photos/emptystar2.png">`
 }
 
 newCreationTemplate += `</span>
-<textarea class="description" placeholder="Add a description (optional)">${$(".description").val() || ''}</textarea>
-<div class="e-buttons">
+<label for="description">Describe this bookmark</label>
+<textarea name="description" class="description" placeholder="Add a description (optional)">${$(".description").val() || ''}</textarea>
+<section class="e-buttons">
 <button class="cancel">Cancel</button>
 <button class="create" type="submit">Create</button>
-</div>
+</section>
 </div>
 </form>`
 return newCreationTemplate
@@ -316,10 +318,10 @@ function initialize(){
 
 function render(){
     if (!store.items.adding&&!store.items.error){
-   $('body').html(generateHTMLTemplate(store.items.bookmarks))
+   $('main').html(generateHTMLTemplate(store.items.bookmarks))
     }
      else
-    $('body').html(generateNewCreationTemplate())
+    $('main').html(generateNewCreationTemplate())
 }
 
 function handleEventListeners(){
