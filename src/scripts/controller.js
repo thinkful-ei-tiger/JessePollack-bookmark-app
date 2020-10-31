@@ -171,8 +171,8 @@ newCreationTemplate +=`<form class="new-bookmark">
 <label for="stars">Rate this bookmark</label>
 <span>`
 for (let i = 0; i < 5; i++){
-    if ( i < store.items.currentRating.rating) newCreationTemplate += `<input name="rating" type="image"class="stars" id="n${i+1}" src="docs/photos/full_star.png"></image>`
-    else newCreationTemplate += `<input type="image" class="stars" id="n${i+1}" src="docs/photos/emptystar2.png">`
+    if ( i < store.items.currentRating.rating) newCreationTemplate += `<input name="rating" type="image"class="stars" id="n${i+1}" src="photos/full_star.png"></image>`
+    else newCreationTemplate += `<input type="image" class="stars" id="n${i+1}" src="photos/emptystar2.png">`
 }
 
 newCreationTemplate += `</span>
