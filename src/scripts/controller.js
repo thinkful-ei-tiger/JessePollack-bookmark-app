@@ -129,13 +129,13 @@ function generateEntryTemplate(item){
     }
 
 function generateExpandedView(item){
-    let newEntry = `<details class="entry-selected max-height">
+    let newEntry = `<section class="entry-selected max-height">
     <div class="nospacing" style="border: none" data-item-id=${item.id}>
     <img class="edit" src="photos/edit_icon.png">
     <button class="visit" onclick="window.open('${item.url}','_blank')">Visit Site</button>
     `
        
-    newEntry +=`</details>`
+    newEntry +=`</section>`
     if (!item.editing) newEntry += `<p>${item.desc}</p>`
     else newEntry += `<textarea class="editing">${item.desc}</textarea>
          <button class="done-editing">Done</button>
