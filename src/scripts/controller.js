@@ -32,21 +32,34 @@ function generateHTMLTemplate(items){
 }
 
 function handleHoverOverStars(){
-    $('body').on('mouseover', '.stars', function(e){
-        e.stopPropagation();
-        let currId = parseInt($(this).attr('id').substring(1), 10)
-        if (currId != store.items.currentRating.rating){
-            store.items.currentRating.rating = currId
-        if (!store.items.adding){
-        let cuidId = $(this).parents(".entry").attr("data-item-id")
-        let item = store.findById(cuidId)
-        item.editingRating = true;
-        }
-        render()
-    }
-        }
+    $('body').on('mouseover', '.stars', function(e){hoverHelper(e)}
     )  
 }
+
+function handleTabkeypress(){
+    $('body').on('keyup','.stars', function(e){
+      if (e.key == "Tab"){
+        let currId = parseInt($(e.currentTarget).attr('id').substring(1), 10)
+        store.items.currentRating.rating = currId
+      }
+    }
+    )
+}
+
+function hoverHelper(e){
+    e.stopPropagation();
+    let currId = parseInt($(e.currentTarget).attr('id').substring(1), 10)
+    if (currId != store.items.currentRating.rating){
+        store.items.currentRating.rating = currId
+    if (!store.items.adding){
+    let cuidId = $(e.currentTarget).parents(".entry").attr("data-item-id")
+    let item = store.findById(cuidId)
+    item.editingRating = true;
+    }
+    render()
+}
+    }
+
 
 function handleEditNoRating(){
     $('body').on('mouseover', '.no-rating', function(e){
@@ -67,10 +80,10 @@ function handleReleaseFromStars(){
 }
 
 function handleClickOnStars(){
-    $('body').on('click', '.stars', function(e){
+    $('body').on('click keypress', '.stars', function(e){
         e.stopPropagation()
         store.items.currentRating.selected = store.items.currentRating.rating;
-        store.items.currentRating.rating = 0
+        if (e.key == null) store.items.currentRating.rating = 0
         if (!store.items.adding){
         let cuidId = $(this).parents(".entry").attr("data-item-id")
         let item = store.findById(cuidId)
@@ -105,7 +118,7 @@ function generateEntryTemplate(item){
             for (let i = 0; i < 5; i++){
                 if (i < (item.editingRating? store.items.currentRating.rating : item.rating)) star="full_star.png"
                 else star = "emptystar2.png"
-                newEntry+=  `<img class ="stars" src="photos/${star}" id="n${i + 1}"}></img>`
+                newEntry+=  `<img class ="stars" src="../../docs/photos/${star}" id="n${i + 1}"}></img>`
             }
         }
         else{
@@ -119,7 +132,7 @@ function generateEntryTemplate(item){
 function generateExpandedView(item){
     let newEntry = `<div class="entry-selected max-height">
     <div class="nospacing" style="border: none" data-item-id=${item.id}>
-    <img class="edit" src="photos/edit_icon.png">
+    <img class="edit" src="../../docs/photos/edit_icon.png">
     <button class="visit" onclick="window.open('${item.url}','_blank')">Visit Site</button>
     `
        
@@ -130,7 +143,7 @@ function generateExpandedView(item){
          ` 
         
 
-   newEntry += `<img class="delete" src="photos/trashcan.png">
+   newEntry += `<img class="delete" src="../../docs/photos/trashcan.png">
 </div>`
 
 return newEntry
@@ -156,10 +169,9 @@ newCreationTemplate +=`<form class="new-bookmark">
 <div class="entry-selected" style="border: none"> 
 <input type="textbox" class="title" placeholder="Title of Page" value=${$(".title").val() || ''}>
 <span>`
-
 for (let i = 0; i < 5; i++){
-    if ( i < store.items.currentRating.rating) newCreationTemplate += `<img class="stars" id="n${i+1}" src="photos/full_star.png">`
-    else newCreationTemplate += `<img class="stars" id="n${i+1}" src="photos/emptystar2.png">`
+    if ( i < store.items.currentRating.rating) newCreationTemplate += `<input type="image"class="stars" id="n${i+1}" src="../../docs/photos/full_star.png"></image>`
+    else newCreationTemplate += `<input type="image" class="stars" id="n${i+1}" src="../../docs/photos/emptystar2.png">`
 }
 
 newCreationTemplate += `</span>
@@ -188,6 +200,7 @@ function handleDoneEditing(){
        )
     })
 }
+
 
 function handleExpansion(){
     $('body').on('click', '.entry', function(){
@@ -325,6 +338,7 @@ function handleEventListeners(){
     handleDoneEditing()
     handleSwitchEntries()
     handleEditNoRating()
+    handleTabkeypress()
 }
 
 export default{
