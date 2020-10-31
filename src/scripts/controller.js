@@ -171,7 +171,7 @@ newCreationTemplate +=`<form class="new-bookmark">
 <label for="stars">Rate this bookmark</label>
 <span>`
 for (let i = 0; i < 5; i++){
-    if ( i < store.items.currentRating.rating) newCreationTemplate += `<input name="rating" type="image"class="stars" id="n${i+1}" src="photos/full_star.png"></image>`
+    if ( i < store.items.currentRating.rating) newCreationTemplate += `<input name="rating" type="image" class="stars" id="n${i+1}" src="photos/full_star.png">`
     else newCreationTemplate += `<input type="image" class="stars" id="n${i+1}" src="photos/emptystar2.png">`
 }
 
@@ -275,19 +275,6 @@ function handleNewBookmarkSubmit(){
     )
 }
 
-//Because the page is re-rendering every time a star is hightlighted or selected, it is necessary to save the drafts
-//
-// function handleTyping(){
-//     $('body').on('input', ".title", function(e){
-//         store.items.drafts.title = $('.title').val()
-//     })
-//     $('body').on('input', ".inputbm", function(e){
-//         store.items.drafts.url = $('.inputbm').val()
-//     })
-//     $('body').on('input', ".description", function(e){
-//         store.items.drafts.desc = $('.description').val()
-//     })
-// }
 
 function handleError(err){
     store.adding = true;
