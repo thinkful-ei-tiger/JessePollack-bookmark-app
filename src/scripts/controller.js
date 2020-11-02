@@ -8,7 +8,7 @@ function generateHTMLTemplate(items){
     <div class="buttons">
         <button class="new">New</button>
         <button type="dropdown" class="filter">Filter By</button>
-        <div class="column"
+        <div class="column">
         <label for="rating">Select Filter</label>
         <select id="rating" name="rating"> 
       ` 
