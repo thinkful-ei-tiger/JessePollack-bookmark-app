@@ -1,9 +1,9 @@
-import $ from 'jquery'
-import controller from './controller'
-import './../styles/index.css'
+import $ from "jquery";
+import controller from "./controller";
+import "./../styles/index.css";
 
-function main(){
-    controller.handleEventListeners()
+function main() {
+  controller.handleEventListeners();
 }
 
-$(main)
+$(main);
