@@ -164,20 +164,20 @@ if (store.items.error) newCreationTemplate += error
 
 newCreationTemplate +=`<form class="new-bookmark">
 <label for="inputbookmark">Place link here</label>
-<input type="textbox" name="inputbookmark" class="inputbm" placeholder="Place link here..." value=${$(".inputbm").val() || ''}>
+<input type="textbox" id="inputbookmark" class="inputbm" placeholder="Place link here..." value=${$(".inputbm").val() || ''}>
 <div class="entry-selected" style="border: none"> 
 <label for="title">Place title here</label>
-<input name="title" type="textbox" class="title" placeholder="Title of Page" value=${$(".title").val() || ''}>
+<input id="title" type="textbox" class="title" placeholder="Title of Page" value=${$(".title").val() || ''}>
 <label for="stars">Rate this bookmark</label>
 <span>`
 for (let i = 0; i < 5; i++){
-    if ( i < store.items.currentRating.rating) newCreationTemplate += `<input name="rating" type="image" class="stars" id="n${i+1}" src="photos/full_star.png">`
-    else newCreationTemplate += `<input type="image" class="stars" id="n${i+1}" src="photos/emptystar2.png">`
+    if ( i < store.items.currentRating.rating) newCreationTemplate += `<input id="stars" name="rating" type="image" class="stars" id="n${i+1}" src="photos/full_star.png">`
+    else newCreationTemplate += `<input id="stars" type="image" class="stars" id="n${i+1}" src="photos/emptystar2.png">`
 }
 
 newCreationTemplate += `</span>
 <label for="description">Describe this bookmark</label>
-<textarea name="description" class="description" placeholder="Add a description (optional)">${$(".description").val() || ''}</textarea>
+<textarea id="description" class="description" placeholder="Add a description (optional)">${$(".description").val() || ''}</textarea>
 <section class="e-buttons">
 <button class="cancel">Cancel</button>
 <button class="create" type="submit">Create</button>

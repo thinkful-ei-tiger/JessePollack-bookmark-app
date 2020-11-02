@@ -4,7 +4,6 @@ import './../styles/index.css'
 
 function main(){
     controller.handleEventListeners()
- //   controller.render()
 }
 
 $(main)
