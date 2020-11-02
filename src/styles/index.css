@@ -164,6 +164,12 @@ input[type=textbox]{
 margin-top: 25px;
 }
 
+.column{
+    display: flex;
+    flex-direction: column;
+    margin-top: -4.5%;
+}
+
 
 
 

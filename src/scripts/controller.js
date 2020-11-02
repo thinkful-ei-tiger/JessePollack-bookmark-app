@@ -8,6 +8,8 @@ function generateHTMLTemplate(items){
     <div class="buttons">
         <button class="new">New</button>
         <button type="dropdown" class="filter">Filter By</button>
+        <div class="column"
+        <label for="rating">Select Filter</label>
         <select id="rating" name="rating"> 
       ` 
       for (let i = 0; i < 6; i++){
@@ -17,6 +19,7 @@ function generateHTMLTemplate(items){
           selected =""
       }
         result += `</select>
+        </div>
     </div>
     <div class="bookmarks">`
     items.forEach((item) =>{
