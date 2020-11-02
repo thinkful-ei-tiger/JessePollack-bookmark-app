@@ -171,11 +171,11 @@ newCreationTemplate +=`<form class="new-bookmark">
 <div class="entry-selected" style="border: none"> 
 <label for="title">Place title here</label>
 <input id="title" type="textbox" class="title" placeholder="Title of Page" value=${$(".title").val() || ''}>
-<label for="stars">Rate this bookmark</label>
-<span>`
+<label for="rate">Rate this bookmark</label>
+<span id="rate">`
 for (let i = 0; i < 5; i++){
-    if ( i < store.items.currentRating.rating) newCreationTemplate += `<input id="stars" name="rating" type="image" class="stars" id="n${i+1}" src="photos/full_star.png">`
-    else newCreationTemplate += `<input id="stars" type="image" class="stars" id="n${i+1}" src="photos/emptystar2.png">`
+    if ( i < store.items.currentRating.rating) newCreationTemplate += `<input name="rating" type="image" class="stars" id="n${i+1}" src="photos/full_star.png">`
+    else newCreationTemplate += `<input type="image" class="stars" id="n${i+1}" src="photos/emptystar2.png">`
 }
 
 newCreationTemplate += `</span>
